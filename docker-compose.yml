@@ -1,0 +1,33 @@
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: balena-client
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_SERVER_URL: http://localhost:3001
+    depends_on:
+      - server
+    networks:
+      - app-network
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: balena-server
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      DB_USERNAME: balena
+      DB_PASSWORD: YOUR_MONGODB_PASSWORD
+      DB_NAME: balena
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
